@@ -33,7 +33,10 @@ AU Melbourne.ovpn, AU Perth.ovpn, Austria.ovpn, AU Sydney.ovpn, Belgium.ovpn, CA
 ## WHEN IPTABLES-PERSISTENT INSTALLS
 Select Yes for IPv4 and Yes for IPv6
 
-# BUT FIRST
+## DISCLAIMER
+This program is free for personal and commercial use and comes with absolutely no warranty. You use this program entirely at your own risk. The author will not be liable for any damages arising from the use of this program. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even an implied warranty for a particular purpose.
+
+# BACKUP YOUR STUFF BEFORE RUNNING THIS
 Before running this script make sure that you have what you need backed up.
 It makes changes to several files and may cause loss in internet connection if errors generate during the installation.
 
