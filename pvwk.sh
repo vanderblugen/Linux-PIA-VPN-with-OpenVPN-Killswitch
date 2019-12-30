@@ -124,6 +124,8 @@ sleep 5
 service openvpn start
 sleep 5
 
+# If the script has any problems this is where it is.  This portion may need to be run twice. 
+
 apt-get install iptables-persistent -y
 netfilter-persistent save
 systemctl enable netfilter-persistent
