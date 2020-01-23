@@ -42,3 +42,6 @@ It makes changes to several files and may cause loss in internet connection if e
 
 # TO GET THIS 
 wget https://raw.githubusercontent.com/vanderblugen/pvwk/master/pvwk.sh
+
+
+## If anyone wants to contribute please reach out
