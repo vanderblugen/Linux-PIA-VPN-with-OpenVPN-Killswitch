@@ -70,7 +70,7 @@ systemctl enable resolvconf.service
 
 apt-get install unzip -y
 apt-get install openvpn -y
-wget https://www.privateinternetaccess.com/openvpn/openvpn.zip
+wget https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip
 unzip openvpn.zip -d /etc/openvpn
 rm openvpn.zip
 cd /etc/openvpn
