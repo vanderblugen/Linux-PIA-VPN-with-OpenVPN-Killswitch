@@ -30,6 +30,8 @@ Filenames are given in the script and are currently:
 
 AU Melbourne.ovpn, AU Perth.ovpn, Austria.ovpn, AU Sydney.ovpn, Belgium.ovpn, CA Montreal.ovpn, CA Toronto.ovpn, CA Vancouver.ovpn, Czech Republic.ovpn, DE Berlin.ovpn, DE Frankfurt.ovpn, Finland.ovpn, France.ovpn, Hong Kong.ovpn, Hungary.ovpn, India.ovpn, Ireland.ovpn, Israel.ovpn, Italy.ovpn, Japan.ovpn, Luxembourg.ovpn, Mexico.ovpn, Netherlands.ovpn, New Zealand.ovpn, Norway.ovpn, Poland.ovpn, Romania.ovpn, Singapore.ovpn, Spain.ovpn, Sweden.ovpn, Switzerland.ovpn, UAE.ovpn, UK London.ovpn, UK Manchester.ovpn, UK Southampton.ovpn, US Atlanta.ovpn, US California.ovpn, US Chicago.ovpn, US Denver.ovpn, US East.ovpn, US Florida.ovpn, US Houston.ovpn, US Las Vegas.ovpn, US New York City.ovpn, US Seattle.ovpn, US Silicon Valley.ovpn, US Texas.ovpn, US Washington DC.ovpn, US West.ovpn
 
+For some more information on the PIA OVPN files:  https://www.privateinternetaccess.com/helpdesk/kb/articles/where-can-i-find-your-ovpn-files
+
 ## WHEN IPTABLES-PERSISTENT INSTALLS
 Select Yes for IPv4 and Yes for IPv6
 
