@@ -72,7 +72,7 @@ apt-get install unzip -y
 apt-get install openvpn -y
 wget https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip
 unzip openvpn-strong.zip -d /etc/openvpn
-rm openvpn.zip
+rm openvpn-strong.zip
 cd /etc/openvpn
 
 echo $PIA_USERNAME >> /etc/openvpn/login
