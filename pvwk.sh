@@ -15,8 +15,8 @@ PIA_USERNAME="USERNAME"
 PIA_PASSWORD="PASSWORD"
 
 # Nameservers may change, set to the defaults, update to new IP if necessary
-NAME_SERVER1="209.222.18.222"
-NAME_SERVER2="209.222.18.218"
+# NAME_SERVER1="209.222.18.222"
+# NAME_SERVER2="209.222.18.218"
 
 # Address of the Network (not the machine IP but of the network) with the / number as well
 NETWORK_ADDRESS="192.168.1.0/24"
@@ -61,9 +61,6 @@ fi
 apt-get install ifupdown -y
 apt-get install -f resolvconf -y
 
-echo "nameserver $NAME_SERVER1" >> /etc/resolvconf/resolv.conf.d/head
-echo "nameserver $NAME_SERVER2" >> /etc/resolvconf/resolv.conf.d/head
-
 systemctl start resolvconf.service
 #systemctl start resolvconf-pull-resolved
 systemctl enable resolvconf.service
@@ -80,6 +77,13 @@ echo $PIA_PASSWORD >> /etc/openvpn/login
 chmod og-rx,u+x,a-w login
 cp "$FILENAME" vpn.conf
 sed -i 's/auth-user-pass/auth-user-pass \/etc\/openvpn\/login/g' vpn.conf
+
+# obtained from https://www.ubuntubuzz.com/2015/09/how-to-fix-openvpn-dns-leak-in-linux.html
+echo "script-security 2" >> /etc/openvpn/vpn.conf
+echo "up /etc/openvpn/update-resolv-conf" >> /etc/openvpn/vpn.conf
+echo "down /etc/openvpn/update-resolv-conf" >> /etc/openvpn/vpn.conf
+
+# enable openvpn with the config file to start automatically
 systemctl enable openvpn@vpn
 
 # This killswitch is based off of a portion of https://www.novaspirit.com/2017/06/22/raspberry-pi-vpn-router-w-pia/
