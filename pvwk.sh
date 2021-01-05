@@ -14,10 +14,6 @@
 PIA_USERNAME="USERNAME"
 PIA_PASSWORD="PASSWORD"
 
-# Nameservers may change, set to the defaults, update to new IP if necessary
-# NAME_SERVER1="209.222.18.222"
-# NAME_SERVER2="209.222.18.218"
-
 # Address of the Network (not the machine IP but of the network) with the / number as well
 NETWORK_ADDRESS="192.168.1.0/24"
 
@@ -25,7 +21,7 @@ NETWORK_ADDRESS="192.168.1.0/24"
 NETWORK_INTERFACE_NAME="enp0s3"
 
 # UDP Ports that are left open
-# Default ports are 53 for DNS and 1198 for VPN which are both UDP
+# Default ports are 53 for DNS and 1197 for VPN which are both UDP
 # Ports may change or differ
 
 PORT1_NUMBER="53"
@@ -36,18 +32,6 @@ PORT2_TYPE="UDP"
 
 # Name of country filename.
 FILENAME="CA Toronto.ovpn"
-
-# As of the writing the filenames were:
-# AU Melbourne.ovpn, AU Perth.ovpn, Austria.ovpn, AU Sydney.ovpn, Belgium.ovpn,
-# CA Montreal.ovpn, CA Toronto.ovpn, CA Vancouver.ovpn, Czech Republic.ovpn,
-# DE Berlin.ovpn, DE Frankfurt.ovpn, Finland.ovpn, France.ovpn, Hong Kong.ovpn,
-# Hungary.ovpn, India.ovpn, Ireland.ovpn, Israel.ovpn, Italy.ovpn, Japan.ovpn,
-# Luxembourg.ovpn, Mexico.ovpn, Netherlands.ovpn, New Zealand.ovpn, Norway.ovpn,
-# Poland.ovpn, Romania.ovpn, Singapore.ovpn, Spain.ovpn, Sweden.ovpn, Switzerland.ovpn,
-# UAE.ovpn, UK London.ovpn, UK Manchester.ovpn, UK Southampton.ovpn, US Atlanta.ovpn,
-# US California.ovpn, US Chicago.ovpn, US Denver.ovpn, US East.ovpn, US Florida.ovpn,
-# US Houston.ovpn, US Las Vegas.ovpn, US New York City.ovpn, US Seattle.ovpn,
-# US Silicon Valley.ovpn, US Texas.ovpn, US Washington DC.ovpn, US West.ovpn
 
 #############################################################################
 ##############################  SCRIPT ITSELF  ##############################
