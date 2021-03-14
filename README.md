@@ -1,5 +1,7 @@
 # PIA VPN with Killswitch
 
+To manually set it up view do-it-yourself.md
+
 The pvwk.sh script installs PIA VPN using OpenVPN and sets up a killswitch.  
 Rules are added to allow for local LAN traffic.  
 The script needs to be run as root/sudo
