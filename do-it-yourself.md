@@ -1,6 +1,6 @@
 This is a verified setup for PIA VPN setup on a Raspberry Pi 3b and 3b+ with a killswitch on the VPN.  So if the VPN goes down, the internet doesn't work.
 
-This setup starts with 2021-01-11-raspios-buster-armhf-lite.  The version with desktop is a little easier to setup due to the easability of using a [url]https://dnsleaktest.com[/url] to verify that everything is operating as expected.
+This setup starts with 2021-01-11-raspios-buster-armhf-lite.  The version with desktop is a little easier to setup due to the easability of using a https://dnsleaktest.com to verify that everything is operating as expected.
 
 Make sure that your running stuff as root
 ```shell
@@ -235,7 +235,7 @@ service openvpn start
 
 
 Here's a few of my sources:
-[list]This page is if you want to continue thru the installation and turn the Pi into a VPN router 
-[url]https://www.novaspirit.com/2017/06/22/raspberry-pi-vpn-router-w-pia/[/url][/list]
-[list]The basis for the iptables setup [url]https://www.raspberrypi.org/forums/viewtopic.php?t=43375[/url][/list]
-[list]PIA VPN with Killswitch [url]https://github.com/vanderblugen/pvwk[/url][/list]
+
+https://www.novaspirit.com/2017/06/22/raspberry-pi-vpn-router-w-pia/
+
+https://www.raspberrypi.org/forums/viewtopic.php?t=43375
