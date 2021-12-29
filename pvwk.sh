@@ -42,15 +42,15 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-apt-get install ifupdown -y
-apt-get install -f resolvconf -y
+apt install ifupdown -y
+apt install -f resolvconf -y
 
 systemctl start resolvconf.service
 #systemctl start resolvconf-pull-resolved
 systemctl enable resolvconf.service
 
-apt-get install unzip -y
-apt-get install openvpn -y
+apt install unzip -y
+apt install openvpn -y
 wget https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip
 unzip openvpn-strong.zip -d /etc/openvpn
 rm openvpn-strong.zip
@@ -114,7 +114,7 @@ sleep 5
 
 # If the script has any problems this is where it is.  This portion may need to be run twice. 
 
-apt-get install iptables-persistent -y
+apt install iptables-persistent -y
 netfilter-persistent save
 systemctl enable netfilter-persistent
 
@@ -123,7 +123,7 @@ systemctl enable netfilter-persistent
 #############################################################################
 # just take out the # before to run this part
 
-# apt-get install jq -y
+# apt install jq -y
 # wget https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh
 # chmod +x dnsleaktest.sh
 # ./dnsleaktest.sh
