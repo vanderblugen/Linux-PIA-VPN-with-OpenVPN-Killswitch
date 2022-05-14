@@ -57,7 +57,7 @@ Create a login file.  There's multiple ways to do this.  USERNAME and PASSWORD a
 ```shell
 echo USERNAME >> /etc/openvpn/login
 echo PASSWORD >> /etc/openvpn/login
-chmod og-rx,u+x,a-w login
+chmod og-rx,u+x,a-w /etc/openvpn/login
 ```
 
 
