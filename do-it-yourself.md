@@ -128,6 +128,7 @@ Verify the port needed in the vpn.conf file
 It's located at the end of the line starting with [b]remote[/b]
 ```shell
 nano /etc/openvpn/vpn.conf[/conf]
+```
 
 Allow VPN establishment with only 2 ports open, 1 for DNS {53) and 1 for VPN (1197)
 If establishing thru an IP and not DNS, the ones with port 53 can be removed
