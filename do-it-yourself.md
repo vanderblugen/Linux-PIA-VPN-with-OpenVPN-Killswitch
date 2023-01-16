@@ -22,11 +22,10 @@ curl icanhazip.com
 ```
 
 
-Install, start, and enable resolvconf start on reboot
+Install and start resolvconf and start on reboot
 ```shell
 apt install resolvconf -y
-systemctl start resolvconf.service
-systemctl enable resolvconf.service
+systemctl enable --now resolvconf.service
 ```
 
 
