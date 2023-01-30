@@ -2,6 +2,7 @@
 
 #############################################################################
 ##### This script installs PIA VPN using OpenVPN and sets up a killswitch
+##### Using iptables
 ##### This script needs to be run as root
 #############################################################################
 
