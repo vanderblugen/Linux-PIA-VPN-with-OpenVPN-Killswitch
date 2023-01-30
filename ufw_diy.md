@@ -1,6 +1,9 @@
 The version of this file uses UFW in Ubuntu
 This is a working progress and not finished....
 
+UFW is installed on most debian distros
+
+
 This is a verified setup for PIA VPN setup on a Raspberry Pi 3b+ with a killswitch on the VPN.  So if the VPN goes down, the internet doesn't work.
 
 This setup starts with 2021-01-11-raspios-buster-armhf-lite.  The version with desktop is a little easier to setup due to the easability of using a https://dnsleaktest.com to verify that everything is operating as expected.
