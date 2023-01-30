@@ -45,7 +45,7 @@ Before running this script make sure that you have what you need backed up.
 It makes changes to several files and may cause loss in internet connection if errors generate during the installation.
 
 # TO GET THIS 
-wget https://raw.githubusercontent.com/vanderblugen/pvwk/master/pvwk.sh
+wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.sh
 
 
 ## If anyone wants to contribute please reach out
