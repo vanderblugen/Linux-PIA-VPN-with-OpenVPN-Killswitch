@@ -1,38 +1,43 @@
 <?php
 
-// This script obviously requires the installation of php
+// This script requires preinstallation of php 5.2.0 or higher prior to running
 // This script installs PIA VPN using OpenVPN and sets up a killswitch using iptables
 // This script needs to be run as root.
 
-// PIA Credentials
-$PiaUsername = "username";
-$piaPassword = "password";
+###################################################################################################################################
+############################################################ VARIABLES ############################################################
+###################################################################################################################################
+
+$PiaUsername = "username";                                                           // PIA Username
+$piaPassword = "password";                                                           // PIA Password
 
 // Address of the Network (not the machine IP but of the network) with the / number as well
 $networkAddress = "192.168.1.0/24";
+$networkInterfaceName = "enp0s3";                                                    // Network interface name
 
-// Network interface name
-$networkInterfaceName = "enp0s3";
-
-// UDP Ports that are left open
-// Default ports are 53 for DNS and 1197 for VPN which are both UDP
-// Ports may change or differ
-
+// UDP Ports that are left open.  Default ports are 53 for DNS and 1197 for VPN which are both UDP.  Ports may differ
 $port1Number="53";
 $port1Type="UDP";
-
 $port2Number="1197";
 $port2Type="UDP";
 
-// Some variables
-$LocationName="ca_toronto.ovpn";
-$OpenVpnLocation = "/etc/openvpn/";
-$VpnConfigFilename = "vpn.conf";
-$CredentialFilename = "login";
+$OpenVpnLocation = "/etc/openvpn/";                                                  // Location where the openvpn files are going to be located
+$LocalZipFile = "openvpn-strong.zip";                                                // Local zip file name
+$url = "https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip";           // Online zip file URL
+$LocationName="ca_toronto.ovpn";                                                     // Openvpn filename for the country
+
+$VpnConfigFilename = "vpn.conf";                                                      //VPN Config filename
+$CredentialFilename = "login";                                                        // Login credentials stored in this file
+
 $OldPattern = "auth-user-pass";
-$NewPattern = "auth-user-pass /etc/openvpn/$CredentialFilename";
-$LocalZipFile = "openvpn-strong.zip";
-$url = "https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip";
+$NewPattern = "auth-user-pass ${OpenVpnLocation}${CredentialFilename}";
+
+//Helps to ensure no DNS leaks
+$DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf" . "\ndown ${OpenVpnLocation}update-resolv-conf";
+
+###################################################################################################################################
+###################################################################################################################################
+###################################################################################################################################
 
 // Verify if running as root
 if (posix_getuid() !== 0){
@@ -46,13 +51,14 @@ if (posix_getuid() !== 0){
 // Install needed software
 #echo shell_exec('apt-get install -f ifupdown openvpn resolvconf php-zip -y');
 
-// Restart resolvconf service
-#echo shell_exec("systemctl start resolvconf.service");
-
 // Get VPN files
 $output = file_get_contents($url);
 file_put_contents($LocalZipFile, $output);
 
+// Restart resolvconf service
+#echo shell_exec("systemctl start resolvconf.service");
+
+// Extract ZipFile
 $output = new ZipArchive;
 if ($output->open($LocalZipFile) === TRUE) {
     $output->extractTo($OpenVpnLocation);
@@ -68,9 +74,8 @@ unlink($LocalZipFile);
 chdir($OpenVpnLocation);
 
 // Create credential file
-
 $output = fopen($CredentialFilename, "w");
-if ($output) 
+if ($output) {
         fwrite($output, $PiaUsername . PHP_EOL);
         fwrite($output, $piaPassword . PHP_EOL);
         fclose($output);
@@ -88,5 +93,16 @@ copy($LocationName, $VpnConfigFilename);
 $fileContent = file_get_contents($VpnConfigFilename);
 $newFileContent = str_replace($OldPattern, $NewPattern, $fileContent);
 file_put_contents($VpnConfigFilename, $newFileContent);
+
+//Helps to ensure no DNS leaks
+$myfile = file_put_contents($VpnConfigFilename, $DataAppend1.PHP_EOL , FILE_APPEND | LOCK_EX);
+
+
+// enable openvpn with the config file to start automatically
+$FileNameParts = pathinfo('/www/htdocs/index.html');
+$VpnConfigFileBasename = $FileNameParts['filename'], "\n"; // filename is only since PHP 5.2.0        //Baasename is the filename without the extension
+#echo shell_exec("systemctl enable openvpn@${VpnConfigFileBaseName}");
+
+
 
 ?>
