@@ -4,38 +4,34 @@
 // This script installs PIA VPN using OpenVPN and sets up a killswitch using iptables
 // This script needs to be run as root.
 
-// Setup the variables
-
 // PIA Credentials
-$pia_username = "";
-$pia_password = "";
+$PiaUsername = "username";
+$piaPassword = "password";
 
 // Address of the Network (not the machine IP but of the network) with the / number as well
-$network_address = "192.168.1.0/24";
+$networkAddress = "192.168.1.0/24";
 
 // Network interface name
-$network_interface_name = "enp0s3";
+$networkInterfaceName = "enp0s3";
 
 // UDP Ports that are left open
 // Default ports are 53 for DNS and 1197 for VPN which are both UDP
 // Ports may change or differ
 
-$port1_number="53";
-$port1_type="UDP";
+$port1Number="53";
+$port1Type="UDP";
 
-$port2_number="1197";
-$port2_type="UDP";
-
-// Name of country filename
-$filename="CA Toronto.ovpn";
+$port2Number="1197";
+$port2Type="UDP";
 
 // Some variables
-$openvpn_location = "/etc/openvpn/";
-$vpn_config_filename = "vpn.conf";
-$credential_filename = "login";
-$old_pattern = "auth-user-pass";
-$new_pattern = "auth-user-pass /etc/openvpn/$(credential_filename)";
-$local_zip_file = "openvpn-strong.zip";
+$LocationName="ca_toronto.ovpn";
+$OpenVpnLocation = "/etc/openvpn/";
+$VpnConfigFilename = "vpn.conf";
+$CredentialFilename = "login";
+$OldPattern = "auth-user-pass";
+$NewPattern = "auth-user-pass /etc/openvpn/$CredentialFilename";
+$LocalZipFile = "openvpn-strong.zip";
 $url = "https://www.privateinternetaccess.com/openvpn/openvpn-strong.zip";
 
 // Verify if running as root
@@ -55,52 +51,42 @@ if (posix_getuid() !== 0){
 
 // Get VPN files
 $output = file_get_contents($url);
-file_put_contents($local_zip_file, $output);
+file_put_contents($LocalZipFile, $output);
 
-$zip = new ZipArchive;
-if ($zip->open($local_zip_file) === TRUE) {
-    $zip->extractTo($openvpn_location);
-    $zip->close();
-    echo ("Unzipped $local_zip_file into $openvpn_location\n");
+$output = new ZipArchive;
+if ($output->open($LocalZipFile) === TRUE) {
+    $output->extractTo($OpenVpnLocation);
+    $output->close();
 } else {
-    exit ("Exiting script.\nUnzip failed\n");
+    exit ("Exiting script. Unzip failed\n");
 }
 
 // Delete the zip file
-if (!unlink($local_zip_file)) { 
-    exit ("Exiting script.\nUnable to delete $local_zip_file\n");
-} 
-else { 
-    echo ("$local_zip_file has been deleted\n"); 
-}
+unlink($LocalZipFile);
 
 // Change directory
-chdir($openvpn_location);
+chdir($OpenVpnLocation);
 
-// Create credential file 
-$file = fopen($credential_filename, "w");
+// Create credential file
 
-if ($file) {
-    // Write the variables to the file
-    fwrite($file, $pia_username . PHP_EOL);
-    fwrite($file, $pia_password . PHP_EOL);
-
-    // Close the file
-    fclose($file);
-
-    echo ("Created login file successfully\n");
+$output = fopen($CredentialFilename, "w");
+if ($output) 
+        fwrite($output, $PiaUsername . PHP_EOL);
+        fwrite($output, $piaPassword . PHP_EOL);
+        fclose($output);
 } else {
-    exit ("Error creating login file. Exiting.\n");
+    exit ("Exiting script. Unable to create $CredentialFilename\n");
 }
 
 // Update permissions on the credential file
-chmod($credential_filename, 0500);
+chmod($CredentialFilename, 0500);
 
 // Copy the openvpn file into the appropriate filename
-move_uploaded_file($filename, $vpn_config_filename);
+copy($LocationName, $VpnConfigFilename);
 
-// Update $vpn_config_filename to have login credential file
-$output = preg_replace($old_pattern, $new_pattern, $vpn_config_filename);
-file_put_contents($credential_filename, $output);
+// Update to have auth with login in the VpnConfigFilename
+$fileContent = file_get_contents($VpnConfigFilename);
+$newFileContent = str_replace($OldPattern, $NewPattern, $fileContent);
+file_put_contents($VpnConfigFilename, $newFileContent);
 
 ?>
