@@ -2,7 +2,7 @@
 
 ########## This script requires preinstallation of php 5.2.0 or higher and pip-zip prior to running
 ########## This script installs PIA VPN using OpenVPN and sets up a killswitch using iptables
-########## This script needs to be run as root.        
+########## This script needs to be run as root.
 
 ###################################################################################################################################
 ############################################################ VARIABLES ############################################################
@@ -35,35 +35,62 @@ $NewPattern = "auth-user-pass ${OpenVpnLocation}${CredentialFilename}";
 $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf" . "\ndown ${OpenVpnLocation}update-resolv-conf";
 
 ###################################################################################################################################
-################################################################################################################################### 
+###################################################################################################################################
 ###################################################################################################################################
 
+// Determine if package is installed
+
+        function isPackageInstalled($packageName)
+        {
+            $output = shell_exec("dpkg-query -W --showformat='\${Status}\n' $packageName");
+            return strpos($output, "install ok installed") !== false;
+        }
+
+// Installs software using the isPackageInstalled function
+
+        function installSoftware($packageName)
+        {
+          if (!isPackageInstalled($packageName)) {
+              echo "\n\n[Installing $packageName]\n";
+              echo shell_exec("apt-get install $packageName -y");
+          }
+        }
+
+// Start, Stop, or Enable service
+
+        function workService($serviceName, $enterState)
+        {
+            echo "\n[Running systemctl $enterState $serviceName]";
+            echo shell_exec("systemctl $enterState $serviceName");
+        }
 
 // Verify if running as root
 
         if (posix_getuid() !== 0){
-                exit("Ending script.  Not running as root.\n");
-            };
+            exit("Ending script.  Not running as root.\n");
+        };
 
 // Run updates
 
         echo "\n\n[Running Update]\n";
         echo shell_exec('apt-get update -y');
-        
+
         echo "\n\n[Running Upgrade]\n";
         echo shell_exec('apt-get upgrade -y');
 
+// Verify if zip is installed
+
+        if (!isPackageInstalled('php-zip')) {
+            installSoftware('php-zip');
+            exit("\nJust installed php-zip. Restart the script\n");
+        }
+
 // Install needed software
-        
-        echo "\n\n[Installing ifupdown]\n";
-        echo shell_exec('apt-get install ifupdown -y');
-        
-        echo "\n\n[Installing openvpn]\n";
-        echo shell_exec('apt-get install openvpn -y');
-        
-        echo "\n\n[Installing resolvconf]\n";
-        echo shell_exec('apt-get install -f resolvconf -y');
-        
+
+        installSoftware('ifupdown');
+        installSoftware('openvpn');
+        installSoftware('resolvconf');
+
         echo "\n\n[PreDownloading iptables-persistent]\n";
         echo shell_exec('apt-get install --download-only iptables-persistent -y');
 
@@ -74,9 +101,8 @@ $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf"
 
 // Start and Enable resolvconf service to start on boot
 
-        echo "\n\n[Starting and enable the resolvconf.service to start on boot']\n";
-        echo shell_exec("systemctl start resolvconf.service");
-        echo shell_exec("systemctl enable resolvconf.service");
+        workService('resolvconf.service','start');
+        workService('resolvconf.service','enable');
 
 // Extract zip file into place
 
@@ -112,12 +138,12 @@ $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf"
         }
 
 // Update permissions on the credential file
-        
+
         echo "\n\n[Changing permissions on $CredentialFilename]\n";
         chmod($CredentialFilename, 0500);
 
 // Copy the openvpn file into the appropriate filename
-        
+
         echo "\n\n[Copying $LocationName to $VpnConfigFilename]\n";
         copy($LocationName, $VpnConfigFilename);
 
@@ -137,8 +163,9 @@ $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf"
 
         $FileNameParts = pathinfo($VpnConfigFilename);
         $VpnConfigFileBasename = $FileNameParts['filename']; // filename is only since PHP 5.2.0        //Baasename is the filename without the extension
-        echo "\n\n[Running 'systemctl enable openvpn@$VpnConfigFileBasename']\n";
-        echo shell_exec("systemctl enable openvpn@$VpnConfigFileBasename");
+        workService("openvpn@$VpnConfigFileBasename","enable");
+        //echo "\n\n[Running 'systemctl enable openvpn@$VpnConfigFileBasename']\n";
+        //echo shell_exec("systemctl enable openvpn@$VpnConfigFileBasename");
 
 // Clearing out old IP tables rules
 
@@ -195,25 +222,21 @@ $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf"
 
 // Stopping and starting openvpn service with pauses
 
-        echo "\n\n[Stopping the OpenVPN Service]\n";
-        echo shell_exec("service openvpn stop");
+        workService('openvpn','stop');
         sleep(5);
-        
-        echo "\n\n[Starting the OpenVPN Service]\n";
-        echo shell_exec("service openvpn start");
+
+        workService('openvpn','start');
         sleep(5);
 
 // Installing iptables-persistent to save iptable rules on reboot
 
-        echo "\n\n[Installing iptables-persistent']\n";
         echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections");
         echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections");
-        echo shell_exec("apt-get install iptables-persistent -y");
+        installSoftware('iptables-persistent');
 
 // Turning on netfilter-persistent and setting to start on restart
 
-        echo "\n\n[Turning on netfilter-persistent save]\n";
         echo shell_exec("netfilter-persistent save");
-        echo shell_exec("systemctl enable netfilter-persistent");
+        workService('netfilter-persistent','enable');
 
 ?>
