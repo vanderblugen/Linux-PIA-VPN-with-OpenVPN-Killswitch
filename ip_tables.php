@@ -54,9 +54,6 @@ echo shell_exec('apt-get upgrade -y');
 echo "\n\n[Installing php-zip]\n";
 echo shell_exec('apt-get install php-zip -y');
 
-echo "\n\n[Installing net-tools]\n";
-echo shell_exec('apt-get install net-tools -y');
-
 echo "\n\n[Installing ifupdown]\n";
 echo shell_exec('apt-get install ifupdown -y');
 
@@ -178,8 +175,10 @@ echo shell_exec("iptables -P OUTPUT DROP");
 echo shell_exec("iptables -P FORWARD DROP");
 
 echo "\n\n[Bringin up and down the network interface]\n";
-echo shell_exec("ifconfig $NetworkInterfaceName down");
-echo shell_exec("ifconfig $NetworkInterfaceName up");
+echo shell_exec("ip link set $NetworkInterfaceName down");
+sleep(5);
+echo shell_exec("ip link set $NetworkInterfaceName up");
+sleep(5);
 
 echo "\n\n[Stopping the OpenVPN Service]\n";
 echo shell_exec("service openvpn stop");
