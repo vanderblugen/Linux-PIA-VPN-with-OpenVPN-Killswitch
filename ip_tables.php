@@ -45,29 +45,29 @@ if (posix_getuid() !== 0){
     };
 
 // Run updates
-echo "\n\n[Running 'apt-get update -y']\n";
+echo "\n\n[Running Update]\n";
 echo shell_exec('apt-get update -y');
 
-echo "\n\n[Running 'apt-get upgrade -y']\n";
+echo "\n\n[Running Upgrade]\n";
 echo shell_exec('apt-get upgrade -y');
 
 // Install needed software
-echo "\n\n[Running 'apt-get install php-zip -y']\n";
+echo "\n\n[Installing php-zip]\n";
 echo shell_exec('apt-get install php-zip -y');
 
-echo "\n\n[Running 'apt-get install net-tools -y']\n";
+echo "\n\n[Installing net-tools]\n";
 echo shell_exec('apt-get install net-tools -y');
 
-echo "\n\n[Running 'apt-get install ipupdown -y']\n";
+echo "\n\n[Installing ifupdown]\n";
 echo shell_exec('apt-get install ifupdown -y');
 
-echo "\n\n[Running 'apt-get install openvpn -y']\n";
+echo "\n\n[Installing openvpn]\n";
 echo shell_exec('apt-get install openvpn -y');
 
-echo "\n\n[Running 'apt-get install -f resolvconf -y']\n";
+echo "\n\n[Installing resolvconf]\n";
 echo shell_exec('apt-get install -f resolvconf -y');
 
-echo "\n\n[Running 'apt-get install --download-only iptables-persistent -y']\n";
+echo "\n\n[PreDownloading iptables-persistent]\n";
 echo shell_exec('apt-get install --download-only iptables-persistent -y');
 
 // Get VPN files
@@ -76,10 +76,10 @@ file_put_contents($LocalZipFile, $output);
 
 // Start and Enable resolvconf service to start on boot
 
-echo "\n\n[Running 'systemctl start resolvconf.service']\n";
+echo "\n\n[Starting resolvconf.service']\n";
 echo shell_exec("systemctl start resolvconf.service");
 
-echo "\n\n[Running 'systemctl enable resolvconf.service']\n";
+echo "\n\n[Setting resolvconf.service to run on startup']\n";
 echo shell_exec("systemctl enable resolvconf.service");
 
 // Extract ZipFile
@@ -187,16 +187,15 @@ sleep(5);
 
 # If the script has any problems this is where it is.
 
-echo "\n\n[Running 'apt-get install iptables-persistent -y']\n";
+echo "\n\n[Installing iptables-persistent']\n";
 echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections");
 echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections");
 echo shell_exec("apt-get install iptables-persistent -y");
 
-echo "\n\n[Running 'netfilter-persistent save']\n";
+echo "\n\n[Turning on netfilter-persistent save]\n";
 echo shell_exec("netfilter-persistent save");
 
-echo "\n\n[Running 'systemctl enable netfilter-persistent']\n";
+echo "\n\n[Enabeling netfilter-persistent to start on restart']\n";
 echo shell_exec("systemctl enable netfilter-persistent");
-
 
 ?>
