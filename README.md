@@ -3,7 +3,9 @@
 To manually set it up view do-it-yourself.md
 
 The ip_tables.sh script installs PIA VPN using OpenVPN and sets up a killswitch in shell
+
 The ip_tables.php script installs it in PHP.  PHP must be installed.
+
 Rules are added to allow for local LAN traffic.  
 The script needs to be run as root/sudo
 
