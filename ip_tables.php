@@ -9,17 +9,17 @@
 ###################################################################################################################################
 
 $PiaUsername = "username";                                                           // PIA Username
-$piaPassword = "password";                                                           // PIA Password
+$PiaPassword = "password";                                                           // PIA Password
 
 // Address of the Network (not the machine IP but of the network) with the / number as well
-$networkAddress = "192.168.1.0/24";
-$networkInterfaceName = "enp0s3";                                                    // Network interface name
+$NetworkAddress = "10.0.2.0/24";
+$NetworkInterfaceName = "enp0s3";                                                    // Network interface name
 
 // UDP Ports that are left open.  Default ports are 53 for DNS and 1197 for VPN which are both UDP.  Ports may differ
-$port1Number="53";
-$port1Type="UDP";
-$port2Number="1197";
-$port2Type="UDP";
+$Port1Number="53";
+$Port1Type="UDP";
+$Port2Number="1197";
+$Port2Type="UDP";
 
 $OpenVpnLocation = "/etc/openvpn/";                                                  // Location where the openvpn files are going to be located
 $LocalZipFile = "openvpn-strong.zip";                                                // Local zip file name
@@ -99,7 +99,7 @@ $output = fopen($CredentialFilename, "w");
 if ($output) {
         echo "\n\n[Creating Credential File $CredentialFilename]\n";
         fwrite($output, $PiaUsername . PHP_EOL);
-        fwrite($output, $piaPassword . PHP_EOL);
+        fwrite($output, $PiaPassword . PHP_EOL);
         fclose($output);
 } else {
     exit ("Exiting script. Unable to create $CredentialFilename\n");
@@ -130,6 +130,65 @@ $VpnConfigFileBasename = $FileNameParts['filename']; // filename is only since P
 echo "\n\n[Running 'systemctl enable openvpn@$VpnConfigFileBasename']\n";
 echo shell_exec("systemctl enable openvpn@$VpnConfigFileBasename");
 
+// Clearing out old IP tables rules
+echo "\n\n[Clear out the old IP tables rules]\n";
+echo shell_exec("iptables -F");
+echo shell_exec("iptables -t nat -F");
+echo shell_exec("iptables -t mangle -F");
+echo shell_exec("iptables -X");
+
+// Allow loopback device (internal communication)
+echo "\n\n[Updating iptables to allow for loopback device (internal communication)]\n";
+echo shell_exec("iptables -A INPUT -i lo -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -o lo -j ACCEPT");
+
+//Allow all local traffic.
+echo "\n\n[Updating iptables to allow for all local traffic]\n";
+echo shell_exec("iptables -A INPUT -s $NetworkAddress -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -d $NetworkAddress -j ACCEPT");
+
+// Allow VPN establishment with only 2 ports open, 1 for DNS and 1 for VPN
+// If establishing thru an IP and not DNS, the ones with port 53 can be removed
+// Port may be different depending on the VPN
+
+echo "\n\n[Updating iptables to allow for 2 ports of communication]\n";
+echo shell_exec("iptables -A INPUT -p $Port1Type --sport $Port1Number -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -p $Port2Type --dport $Port2Number -j ACCEPT");
+echo shell_exec("iptables -A INPUT -p $Port2Type --sport $Port2Number -j ACCEPT");
+
+//Accept all TUN connections (tun = VPN tunnel)
+echo "\n\n[Updating iptables to allow for all TUN connection traffic]\n";
+echo shell_exec("iptables -A OUTPUT -o tun+ -j ACCEPT");
+echo shell_exec("iptables -A INPUT -i tun+ -j ACCEPT");
+
+#Set default policies to drop all communication unless specifically allowed
+echo "\n\n[Updating iptable to drop all communication unless specifically allowed]\n";
+echo shell_exec("iptables -P INPUT DROP");
+echo shell_exec("iptables -P OUTPUT DROP");
+echo shell_exec("iptables -P FORWARD DROP");
+
+echo "\n\n[Bringin up and down the network interface]\n";
+echo shell_exec("ifconfig $NetworkInterfaceName down");
+echo shell_exec("ifconfig $NetworkInterfaceName up");
+
+echo "\n\n[Stopping the OpenVPN Service]\n";
+echo shell_exec("service openvpn stop");
+sleep(5);
+
+echo "\n\n[Starting the OpenVPN Service]\n";
+echo shell_exec("service openvpn start");
+sleep(5);
+
+# If the script has any problems this is where it is.
+
+echo "\n\n[Running 'apt-get install iptables-persistent -y']\n";
+echo shell_exec("apt-get install iptables-persistent -y");
+
+echo "\n\n[Running 'netfilter-persistent save']\n";
+echo shell_exec("netfilter-persistent save");
+
+echo "\n\n[Running 'systemctl enable netfilter-persistent']\n"
+echo shell_exec("systemctl enable netfilter-persistent");
 
 
 ?>
