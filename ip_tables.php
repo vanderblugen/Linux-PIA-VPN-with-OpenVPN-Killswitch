@@ -55,6 +55,9 @@ echo shell_exec('apt-get upgrade -y');
 echo "\n\n[Running 'apt-get install php-zip -y']\n";
 echo shell_exec('apt-get install php-zip -y');
 
+echo "\n\n[Running 'apt-get install net-tools -y']\n";
+echo shell_exec('apt-get install net-tools -y');
+
 echo "\n\n[Running 'apt-get install ipupdown -y']\n";
 echo shell_exec('apt-get install ifupdown -y');
 
