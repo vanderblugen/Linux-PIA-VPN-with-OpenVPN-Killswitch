@@ -2,7 +2,8 @@
 
 To manually set it up view do-it-yourself.md
 
-The pvwk.sh script installs PIA VPN using OpenVPN and sets up a killswitch.  
+The ip_tables.sh script installs PIA VPN using OpenVPN and sets up a killswitch in shell
+The ip_tables.php script installs it in PHP.  PHP must be installed.
 Rules are added to allow for local LAN traffic.  
 The script needs to be run as root/sudo
 
@@ -45,7 +46,10 @@ Before running this script make sure that you have what you need backed up.
 It makes changes to several files and may cause loss in internet connection if errors generate during the installation.
 
 # TO GET THIS 
-wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.sh
+wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-wih-OpenVPN-Killswitch/master/ip_tables.sh
+or
+wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-wih-OpenVPN-Killswitch/master/ip_tables.php
+
 
 
 ## If anyone wants to contribute please reach out
