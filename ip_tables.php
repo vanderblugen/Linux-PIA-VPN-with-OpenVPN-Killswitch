@@ -67,6 +67,7 @@ echo shell_exec('apt-get install openvpn -y');
 echo "\n\n[Running 'apt-get install -f resolvconf -y']\n";
 echo shell_exec('apt-get install -f resolvconf -y');
 
+
 // Get VPN files
 $output = file_get_contents($url);
 file_put_contents($LocalZipFile, $output);
@@ -183,6 +184,9 @@ echo shell_exec("service openvpn start");
 sleep(5);
 
 # If the script has any problems this is where it is.
+
+echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections");
+echo shell_exec("echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections");
 
 echo "\n\n[Running 'apt-get install iptables-persistent -y']\n";
 echo shell_exec("apt-get install iptables-persistent -y");
