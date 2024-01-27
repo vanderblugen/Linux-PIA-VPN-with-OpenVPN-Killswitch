@@ -187,7 +187,7 @@ echo shell_exec("apt-get install iptables-persistent -y");
 echo "\n\n[Running 'netfilter-persistent save']\n";
 echo shell_exec("netfilter-persistent save");
 
-echo "\n\n[Running 'systemctl enable netfilter-persistent']\n"
+echo "\n\n[Running 'systemctl enable netfilter-persistent']\n";
 echo shell_exec("systemctl enable netfilter-persistent");
 
 
