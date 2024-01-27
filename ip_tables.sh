@@ -46,6 +46,9 @@ fi
 apt-get install ifupdown -y
 apt-get install -f resolvconf -y
 
+# pre download iptables-persistent
+apt-get install --download-only iptables-persistent -y
+
 systemctl start resolvconf.service
 #systemctl start resolvconf-pull-resolved
 systemctl enable resolvconf.service
@@ -113,7 +116,9 @@ sleep 5
 service openvpn start
 sleep 5
 
-# If the script has any problems this is where it is.  This portion may need to be run twice. 
+# set default values as yes for v4 and v6 on the iptables-persistent install
+echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
+echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 
 apt-get install iptables-persistent -y
 netfilter-persistent save
