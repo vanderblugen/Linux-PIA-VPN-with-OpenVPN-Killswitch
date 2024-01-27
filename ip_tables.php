@@ -159,8 +159,9 @@ echo shell_exec("iptables -A OUTPUT -d $NetworkAddress -j ACCEPT");
 
 echo "\n\n[Updating iptables to allow for 2 ports of communication]\n";
 echo shell_exec("iptables -A INPUT -p $Port1Type --sport $Port1Number -j ACCEPT");
-echo shell_exec("iptables -A OUTPUT -p $Port2Type --dport $Port2Number -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -p $Port1Type --dport $Port1Number -j ACCEPT");
 echo shell_exec("iptables -A INPUT -p $Port2Type --sport $Port2Number -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -p $Port2Type --dport $Port2Number -j ACCEPT");
 
 //Accept all TUN connections (tun = VPN tunnel)
 echo "\n\n[Updating iptables to allow for all TUN connection traffic]\n";
