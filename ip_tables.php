@@ -11,8 +11,7 @@
 $PiaUsername = "username";                                                           // PIA Username
 $PiaPassword = "password";                                                           // PIA Password
 
-// Address of the Network (not the machine IP but of the network) with the / number as well
-$NetworkAddress = "10.0.2.0/24";
+// Name of the network interface
 $NetworkInterfaceName = "enp0s3";                                                    // Network interface name
 
 // UDP Ports that are left open.  Default ports are 53 for DNS and 1197 for VPN which are both UDP.  Ports may differ
@@ -150,8 +149,12 @@ echo shell_exec("iptables -A OUTPUT -o lo -j ACCEPT");
 
 //Allow all local traffic.
 echo "\n\n[Updating iptables to allow for all local traffic]\n";
-echo shell_exec("iptables -A INPUT -s $NetworkAddress -j ACCEPT");
-echo shell_exec("iptables -A OUTPUT -d $NetworkAddress -j ACCEPT");
+echo shell_exec("iptables -A INPUT -s 10.0.0.0/8 -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -d 10.0.0.0/8 -j ACCEPT");
+echo shell_exec("iptables -A INPUT -s 172.16.0.0/12 -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -d 172.16.0.0/12 -j ACCEPT");
+echo shell_exec("iptables -A INPUT -s 192.168.0.0/16 -j ACCEPT");
+echo shell_exec("iptables -A OUTPUT -d 192.168.0.0/16 -j ACCEPT");
 
 // Allow VPN establishment with only 2 ports open, 1 for DNS and 1 for VPN
 // If establishing thru an IP and not DNS, the ones with port 53 can be removed
