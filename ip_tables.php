@@ -41,26 +41,45 @@ $DataAppend1 = "script-security 2" . "\nup ${OpenVpnLocation}update-resolv-conf"
 
 // Verify if running as root
 if (posix_getuid() !== 0){
-        exit ("This is non-root");
+        exit("Ending script.  Not running as root.\n");
     };
 
 // Run updates
-#echo shell_exec('apt update -y');
-#echo shell_exec('apt upgrade -y');
+echo "\n\n[Running 'apt-get update -y']\n";
+echo shell_exec('apt-get update -y');
+
+echo "\n\n[Running 'apt-get upgrade -y']\n";
+echo shell_exec('apt-get upgrade -y');
 
 // Install needed software
-#echo shell_exec('apt-get install -f ifupdown openvpn resolvconf php-zip -y');
+echo "\n\n[Running 'apt-get install php-zip -y']\n";
+echo shell_exec('apt-get install php-zip -y');
+
+echo "\n\n[Running 'apt-get install ipupdown -y']\n";
+echo shell_exec('apt-get install ifupdown -y');
+
+echo "\n\n[Running 'apt-get install openvpn -y']\n";
+echo shell_exec('apt-get install openvpn -y');
+
+echo "\n\n[Running 'apt-get install -f resolvconf -y']\n";
+echo shell_exec('apt-get install -f resolvconf -y');
 
 // Get VPN files
 $output = file_get_contents($url);
 file_put_contents($LocalZipFile, $output);
 
-// Restart resolvconf service
-#echo shell_exec("systemctl start resolvconf.service");
+// Start and Enable resolvconf service to start on boot
+
+echo "\n\n[Running 'systemctl start resolvconf.service']\n";
+echo shell_exec("systemctl start resolvconf.service");
+
+echo "\n\n[Running 'systemctl enable resolvconf.service']\n";
+echo shell_exec("systemctl enable resolvconf.service");
 
 // Extract ZipFile
 $output = new ZipArchive;
 if ($output->open($LocalZipFile) === TRUE) {
+    echo "\n\n[Unzipping file $LocalZipFile into $OpenVpnLocation]\n";
     $output->extractTo($OpenVpnLocation);
     $output->close();
 } else {
@@ -68,14 +87,17 @@ if ($output->open($LocalZipFile) === TRUE) {
 }
 
 // Delete the zip file
+echo "\n\n[Deleting Zip File $LocalZipFile]\n";
 unlink($LocalZipFile);
 
 // Change directory
+echo "\n\n[Changing directory to $OpenVpnLocation]\n";
 chdir($OpenVpnLocation);
 
 // Create credential file
 $output = fopen($CredentialFilename, "w");
 if ($output) {
+        echo "\n\n[Creating Credential File $CredentialFilename]\n";
         fwrite($output, $PiaUsername . PHP_EOL);
         fwrite($output, $piaPassword . PHP_EOL);
         fclose($output);
@@ -84,24 +106,29 @@ if ($output) {
 }
 
 // Update permissions on the credential file
+
+echo "\n\n[Changing permissions on $CredentialFilename]\n";
 chmod($CredentialFilename, 0500);
 
 // Copy the openvpn file into the appropriate filename
+echo "\n\n[Copying $LocationName to $VpnConfigFilename]\n";
 copy($LocationName, $VpnConfigFilename);
 
 // Update to have auth with login in the VpnConfigFilename
+echo "\n\n[Updating $VpnConfigFilename with login file]\n";
 $fileContent = file_get_contents($VpnConfigFilename);
 $newFileContent = str_replace($OldPattern, $NewPattern, $fileContent);
 file_put_contents($VpnConfigFilename, $newFileContent);
 
 //Helps to ensure no DNS leaks
+echo "\n\n[Updating $VpnConfigFilename to help ensure no DNS leaks]\n";
 $myfile = file_put_contents($VpnConfigFilename, $DataAppend1.PHP_EOL , FILE_APPEND | LOCK_EX);
 
-
 // enable openvpn with the config file to start automatically
-$FileNameParts = pathinfo('/www/htdocs/index.html');
-$VpnConfigFileBasename = $FileNameParts['filename'], "\n"; // filename is only since PHP 5.2.0        //Baasename is the filename without the extension
-#echo shell_exec("systemctl enable openvpn@${VpnConfigFileBaseName}");
+$FileNameParts = pathinfo($VpnConfigFilename);
+$VpnConfigFileBasename = $FileNameParts['filename']; // filename is only since PHP 5.2.0        //Baasename is the filename without the extension
+echo "\n\n[Running 'systemctl enable openvpn@$VpnConfigFileBasename']\n";
+echo shell_exec("systemctl enable openvpn@$VpnConfigFileBasename");
 
 
 
