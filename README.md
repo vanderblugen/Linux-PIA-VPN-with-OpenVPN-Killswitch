@@ -1,52 +1,33 @@
 # PIA VPN with Killswitch
-
 To manually set it up view do-it-yourself.md
 
-The ip_tables.sh script installs PIA VPN using OpenVPN and sets up a killswitch in shell.
-The ip_tables.php script installs it in PHP.  PHP must be installed.
-Rules are added to allow for local LAN traffic.  
-The scripts need to be run as root/sudo
+Two scripts available
+- ip_tables.sh
+    - This is a shell script that fully installs PIA VPN using OpenVPN and sets up a killswitch using shell
+- ip_tables.php
+    - This is a newer script that fully installs with no user interaction using php and outputs any logs to a file
+- Rules are added to allow for local LAN traffic
+- Both scripts need to be run as sudo/root
 
 ## Variables
-There are variables that need to be updated in script
+- Multiple variables are present in the scripts that may require updating
 
-#### PIA_USERNAME and PIA_PASSWORD
-These are your PIA credentials
-    
-#### NAMESERVER_1/NAMESERVER_2
-These may need to be updated at some point, but currently are correct.
+#### Ports Left Open
+- Different OVPN files may require different port numbers
+- Consult the specific OVPN file for verification
 
-#### NETWORK_ADDRESS
-This is the address of the network, not the IP address of a machine on the network.  
-Don't forget to put the / number as well
+#### Downloaded ZIP File
+- For some more information on the PIA OVPN files:  https://www.privateinternetaccess.com/helpdesk/kb/articles/where-can-i-find-your-ovpn-files-2
 
-#### NETWORK_INTERFACE_NAME
-This is the name of the interface that faces the internet on the machine.  
-This can be determined by running ifconfig from the terminal
+## Disclaimer
+- This is free for personal use and comes with absolutely no warranty. You use this program entirely at your own risk. The author will not be liable for any damages arising from the use of this program. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even an implied warranty for a particular purpose
 
-#### PORTS LEFT OPEN
-These are currently correct but may change wanting to implement this with a different VPN provider.
+## Backup Your Stuff Before Running This
+- Before running this script make sure that you have what you need backed up
+- The noted scripts make changes to several files and may cause loss in internet connectivity
 
-#### FILENAME
-This is the filename of the location where connection should end on the internet.
-Filenames are given in the script and are currently:
-
-AU Melbourne.ovpn, AU Perth.ovpn, Austria.ovpn, AU Sydney.ovpn, Belgium.ovpn, CA Montreal.ovpn, CA Toronto.ovpn, CA Vancouver.ovpn, Czech Republic.ovpn, DE Berlin.ovpn, DE Frankfurt.ovpn, Finland.ovpn, France.ovpn, Hong Kong.ovpn, Hungary.ovpn, India.ovpn, Ireland.ovpn, Israel.ovpn, Italy.ovpn, Japan.ovpn, Luxembourg.ovpn, Mexico.ovpn, Netherlands.ovpn, New Zealand.ovpn, Norway.ovpn, Poland.ovpn, Romania.ovpn, Singapore.ovpn, Spain.ovpn, Sweden.ovpn, Switzerland.ovpn, UAE.ovpn, UK London.ovpn, UK Manchester.ovpn, UK Southampton.ovpn, US Atlanta.ovpn, US California.ovpn, US Chicago.ovpn, US Denver.ovpn, US East.ovpn, US Florida.ovpn, US Houston.ovpn, US Las Vegas.ovpn, US New York City.ovpn, US Seattle.ovpn, US Silicon Valley.ovpn, US Texas.ovpn, US Washington DC.ovpn, US West.ovpn
-
-For some more information on the PIA OVPN files:  https://www.privateinternetaccess.com/helpdesk/kb/articles/where-can-i-find-your-ovpn-files-2
-
-## DISCLAIMER
-This program is free for personal and commercial use and comes with absolutely no warranty. You use this program entirely at your own risk. The author will not be liable for any damages arising from the use of this program. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even an implied warranty for a particular purpose.
-
-# BACKUP YOUR STUFF BEFORE RUNNING THIS
-Before running this script make sure that you have what you need backed up.
-It makes changes to several files and may cause loss in internet connection if errors generate during the installation.
-
-# TO GET THIS 
-wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-wih-OpenVPN-Killswitch/master/ip_tables.sh
-or
-wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-wih-OpenVPN-Killswitch/master/ip_tables.php
-
-
+## To Get These
+- wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.sh
+- wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.php
 
 ## If anyone wants to contribute please reach out
