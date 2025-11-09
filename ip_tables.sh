@@ -45,7 +45,7 @@ if [ ! -f "/usr/sbin/ifconfig" ]; then
 fi
 
 apt-get install ifupdown -y
-apt-get install -f resolvconf -y
+apt-get install resolvconf -y
 
 # pre download iptables-persistent
 apt-get install --download-only iptables-persistent -y
