@@ -25,11 +25,8 @@ NETWORK_INTERFACE_NAME="enp0s3"
 # Default ports are 53 for DNS and 1197 for VPN which are both UDP
 # Ports may change or differ
 
-PORT1_NUMBER="53"
+PORT1_NUMBER="1197"
 PORT1_TYPE="UDP"
-
-PORT2_NUMBER="1197"
-PORT2_TYPE="UDP"
 
 # Name of country filename.
 FILENAME="CA Toronto.ovpn"
@@ -41,6 +38,10 @@ FILENAME="CA Toronto.ovpn"
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
+fi
+
+if [ ! -f "/usr/sbin/ifconfig" ]; then
+   sudo apt install net-tools -y
 fi
 
 apt-get install ifupdown -y
@@ -96,8 +97,6 @@ iptables -A OUTPUT -d $NETWORK_ADDRESS -j ACCEPT
 
 iptables -A OUTPUT -p $PORT1_TYPE --dport $PORT1_NUMBER -j ACCEPT
 iptables -A INPUT -p $PORT1_TYPE --sport $PORT1_NUMBER -j ACCEPT
-iptables -A OUTPUT -p $PORT2_TYPE --dport $PORT2_NUMBER -j ACCEPT
-iptables -A INPUT -p $PORT2_TYPE --sport $PORT2_NUMBER -j ACCEPT
 
 #Accept all TUN connections (tun = VPN tunnel)
 iptables -A OUTPUT -o tun+ -j ACCEPT
