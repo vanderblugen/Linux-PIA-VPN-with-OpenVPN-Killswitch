@@ -30,4 +30,13 @@ Two scripts available
 - wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.sh
 - wget https://raw.githubusercontent.com/vanderblugen/Linux-PIA-VPN-with-OpenVPN-Killswitch/master/ip_tables.php
 
+## To Check for DNS Leaks
+
+```shell
+cd
+curl https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh -o dnsleaktest.sh
+chmod +x dnsleaktest.sh
+./dnsleaktest.sh
+```
+
 ## If anyone wants to contribute please reach out
