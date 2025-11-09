@@ -119,19 +119,15 @@ sleep 5
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections
 echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections
 
-apt-get install iptables-persistent -y
-netfilter-persistent save
-systemctl enable netfilter-persistent
-
 #############################################################################
 ################################# OPTIONAL ##################################
 #############################################################################
-# just take out the # before to run this part
+# check to see if DNS is leaking
 
-# apt-get install jq -y
-# wget https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh
-# chmod +x dnsleaktest.sh
-# ./dnsleaktest.sh
+apt-get install jq -y
+wget https://raw.githubusercontent.com/macvk/dnsleaktest/master/dnsleaktest.sh
+chmod +x dnsleaktest.sh
+./dnsleaktest.sh
 # this will say if dns is leaking and where you are appearing from
 
 # Can also be tested by going to dnsleaktest.com and running extended test
