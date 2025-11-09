@@ -46,6 +46,7 @@ fi
 
 apt-get install ifupdown -y
 apt-get install resolvconf -y
+apt-get install openvpn-systemd-resolved -y
 
 # pre download iptables-persistent
 apt-get install --download-only iptables-persistent -y
