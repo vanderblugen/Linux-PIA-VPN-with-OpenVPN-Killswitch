@@ -45,7 +45,6 @@ if [ ! -f "/usr/sbin/ifconfig" ]; then
 fi
 
 apt-get install ifupdown -y
-apt-get install resolvconf -y
 apt-get install openvpn-systemd-resolved -y
 
 # pre download iptables-persistent
