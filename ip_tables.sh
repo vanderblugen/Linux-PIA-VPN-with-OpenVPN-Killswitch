@@ -35,21 +35,6 @@ FILENAME="CA Toronto.ovpn"
 ##############################  SCRIPT ITSELF  ##############################
 #############################################################################.
 
-if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 
-   exit 1
-fi
-
-if [ ! -f "/usr/sbin/ifconfig" ]; then
-   sudo apt install net-tools -y
-fi
-
-apt-get install ifupdown -y
-apt-get install openvpn-systemd-resolved -y
-
-# pre download iptables-persistent
-apt-get install --download-only iptables-persistent -y
-
 systemctl start resolvconf.service
 #systemctl start resolvconf-pull-resolved
 systemctl enable resolvconf.service
