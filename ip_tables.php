@@ -102,31 +102,12 @@ $LogFileName = dirname(__FILE__) . "/" . basename(__FILE__, ".php") . ".log";   
             exit("Ending script.  Not running as root.\n");
         };
 
-// Run updates
-
-        logThis(givemeDateTimeNow(),false);
-
-        logThis("[Running Update]",true);
-        runThis('apt-get update -y');
-
-        logThis("[Running Upgrade]",true);
-        runThis('apt-get upgrade -y');
-
 // Verify if zip is installed
 
         if (!isPackageInstalled('php-zip')) {
             installSoftware('php-zip');
             exit("\ust installed php-zip. Restart the script\n");
         }
-
-// Install needed software
-
-        installSoftware('ifupdown');
-        installSoftware('openvpn');
-        installSoftware('resolvconf');
-
-        logThis("[PreDownloading iptables-persistent]",true);
-        runThis('apt-get install --download-only iptables-persistent -y');
 
 // Get VPN zip file
 
