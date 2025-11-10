@@ -1,6 +1,27 @@
 # PIA VPN with Killswitch
 To manually set it up view do-it-yourself.md
 
+# Pre-Installation
+Run this prior to either of the scripts
+
+```shell
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
+if [ ! -f "/usr/sbin/ifconfig" ]; then
+   sudo apt install net-tools -y
+fi
+
+apt-get install ifupdown -y
+
+# pre download iptables-persistent
+apt-get install --download-only iptables-persistent -y
+sudo apt-get install openvpn-systemd-resolved -y
+```
+
 Two scripts available
 - ip_tables.sh
     - This is a shell script that fully installs PIA VPN using OpenVPN and sets up a killswitch using shell
