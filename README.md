@@ -19,6 +19,7 @@ if [ ! -f "/usr/sbin/ifconfig" ]; then
 fi
 
 apt-get install ifupdown -y
+apt-get install openvpn -y
 
 # pre download iptables-persistent
 apt-get install --download-only iptables-persistent -y
