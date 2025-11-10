@@ -6,6 +6,9 @@ Run this prior to either of the scripts
 
 ```shell
 
+apt-get update -y
+apt-get upgrade -y
+
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    exit 1
